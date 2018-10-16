@@ -27,4 +27,157 @@
 
 
 %Edit
-\section*{Overview}
+\section*{Network apps}
+
+Client Server architecture\\
+EX. Google Data Centers\\
+
+Pure Peer to Peer architecture\\
+no always on servers\\
+Arbitrary end systems directly communicate\\
+peers are intermittently connected and change IP addresses\\
+
+\noindent Pro: Highly scalable \\
+\noindent Con: Difficult to manage\\
+\indent\indent Unreliable\\
+\indent\indent Lookup/Discovery\\
+
+
+Hybrid of client-server and P2P\\
+\noindent Skype:
+\indent\indent Voice over is p2p\\
+\indent\indent Chat/messages is client-server\\
+
+Processes communication\\
+
+Sockets\\
+Process sends/receives messages to and from it's socket\\
+Sockets are like doors; messages can come or go from them\\
+
+Addressing processes\\
+To receive messages, process must have identifier\\
+host device a 32 bit IP address\\
+Identifier includes both IP address and port numbers associated to process on host\\
+HTTP server: Port 80\\
+Mail server: Port 25\\
+
+App Layer Protocol defines\\
+
+What traspoirt services does an app need?
+{\color{blue} Data Loss}
+audio can tolerate some loss
+file transfers require 100\% reliable data transfer
+
+{\color{blue} Timing}
+some apps require low delay to be effective
+EX. Gaming
+
+{\color{blue} Throughput}\\
+some apps require minimm amount of throughput to be effective\\
+other apps make use of what they get\\
+EX. Tweet; does not require strong through put
+EX. Video streaming MUST have strong through put
+
+{\color{blue} Security}\\
+Encryption, data integrity\\
+
+Transport service requirements of common apps\\
+Jitter: variation in average delay\\
+
+%{r | l | l | l}
+\bf{Application} & & &
+
+Internet Transport protocols services\\
+TCP service\\
+connection oriented
+reliable transport 
+flow control
+
+UDP service\\
+
+Streaming multimedia \arr TCP, UDP, or SCTP\\
+
+SCTP \arr TCP friendly congestion control but not reliable data transfer\\
+
+
+\section*{Application Layer}
+
+Web and HTTP\\
+{\color{blue} web page} consists of objects\\
+{\color{blue} base HTML file} which includes several referenced objects\\
+Each object is addressable by a {\color{blue} URL}
+
+HTTP Overview\\
+HTTP: hypertext transfer protocol\\
+{\color{blue} client}: browser that requests, receives, displays web objects\\
+{\color{blue} server}: web server sends objects in response to requests\\
+Uses TCP\\
+HTTP is 'stateless'\\
+\arr Protocols that maintain state are complex\\
+Client sends a TCP SYN  Server sends an ack, client sends an http request.\\
+non persistent HTTP\\
+At most, one object is sent over TCP connection\\
+
+Non persistent HTTP without piplining:\\
+Client sends TCP SYN\\
+Server sends TCP SYN and ACK\\
+C sends HTTP Request\\
+s sends object\\
+c sends TCP FIN\\
+c deciphers if it needs to ask for more objects;\\
+C sends TCP SYN\\
+s sends TCP SYN and ACK\\
+c requests object 1\\
+s sends object 1\\
+c sends TCP FIN\\
+c sends TCP SYN\\
+s sends TCPY SYN and ACK\\
+c requests object 2\\
+s sends object 2\\
+c sends TCP FIN\\
+Every time the client recieves it's at 1RTT, so it totaled upto 6RTT for the whole interaction\\
+
+
+persistent HTTP\\
+Multiple objects can be sent over single TCP connection between a client and server\\
+Client sends TCP SYN\\
+Server sends TCP SYN and ACK\\
+c requests http\\
+s sends http\\
+c requests object 1\\
+s sends object 1\\
+c requests object 2\\
+s sends object 2\\
+c sends TCP FIN\\
+4 RTT for this interaction\\
+
+
+Non persistent HTTP with piplining
+C sends syn\\
+s sends syn and ack\\
+c sends http request\\
+s sends http \\
+c sends TCP FIN\\
+Client sees there are two objects;\\
+C sends SYN\\
+S sends SYN and ACK\\
+C requests object 1\\
+c requests object 2\\
+s sends object 1 \\
+s sends object 2\\
+c sends TCP FIN\\
+4 RTT for this interaction\\
+
+The best option is persistent with piplining.\\
+With pipelining, the most objects we can request/send is 3 objects\\
+
+If the objects are varied in size, you have to look at adding the transmission times for all 3 objects seperately\\
+
+HTTP response status codes:\\
+200 0k\\
+301 Moved Permanently\\
+
+
+
+\noindent\large{\bf \textit{User Server State: Cookies}}\\
+Cookies are used to keep state\\
